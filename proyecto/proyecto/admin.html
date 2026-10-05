@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador - COPACI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f6f9; }
+        .btn-volver { display: inline-block; padding: 8px 15px; background: #333; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body style="background-color: #f4f6f9; font-family: Arial, sans-serif;">
+
+    <div class="admin-container">
+        <h1>Panel de Control del Administrador</h1>
+        <p>Monitoreo de registros y accesos al Portal COPACI.</p>
+
+        <h2>1. Usuarios Registrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Usuario / Correo</th>
+                    <th>Fecha de Registro</th>
+                </tr>
+            </thead>
+            <tbody id="tablaUsuarios">
+                <!-- Se llena con JavaScript -->
+            </tbody>
+        </table>
+
+        <h2>2. Historial de Entradas (Logins)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario que ingresó</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody id="tablaAccesos">
+                <!-- Se llena con JavaScript -->
+            </tbody>
+        </table>
+
+        <a href="index.html" class="btn-volver">Regresar al Inicio</a>
+    </div>
+
+    <script>
+        // Cargar usuarios registrados
+        const usuarios = JSON.parse(localStorage.getItem('copaci_usuarios')) || [];
+        const tbodyUsuarios = document.getElementById('tablaUsuarios');
+        if(usuarios.length === 0) {
+            tbodyUsuarios.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay usuarios registrados todavía.</td></tr>';
+        } else {
+            usuarios.forEach(u => {
+                tbodyUsuarios.innerHTML += `<tr><td>${u.nombre}</td><td>${u.usuario}</td><td>${u.fecha}</td></tr>`;
+            });
+        }
+
+        // Cargar accesos
+        const accesos = JSON.parse(localStorage.getItem('copaci_accesos')) || [];
+        const tbodyAccesos = document.getElementById('tablaAccesos');
+        if(accesos.length === 0) {
+            tbodyAccesos.innerHTML = '<tr><td colspan="2" style="text-align:center;">No hay registros de entradas todavía.</td></tr>';
+        } else {
+            accesos.forEach(a => {
+                tbodyAccesos.innerHTML += `<tr><td>${a.usuario}</td><td>${a.fecha}</td></tr>`;
+            });
+        }
+    </script>
+</body>
+</html>
