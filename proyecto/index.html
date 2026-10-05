@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal COPACI - Iniciar Sesión</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+    <div class="login-container">
+        <div class="login-header">
+            <img src="logo.jpg" alt="Logo COPACI" width="100">
+            <h1>Portal COPACI</h1>
+            <p>Consejo de Participación Ciudadana</p>
+        </div>
+
+        <!-- Formulario de Login -->
+        <form id="loginForm" class="login-form">
+            <h2>Iniciar Sesión</h2>
+            <div class="input-group">
+                <label for="loginUser">Usuario o Correo:</label>
+                <input type="text" id="loginUser" required placeholder="Tu usuario">
+            </div>
+            <div class="input-group">
+                <label for="loginPass">Contraseña:</label>
+                <input type="password" id="loginPass" required placeholder="********">
+            </div>
+            <button type="submit" class="btn-primary">Entrar al Portal</button>
+        </form>
+
+        <div class="register-section">
+            <p>¿No tienes una cuenta?</p>
+            <a href="registro.html" class="btn-secondary">Registrarse aquí</a>
+        </div>
+        
+        <div style="margin-top: 15px; text-align: center;">
+            <a href="admin.html" style="color: #666; font-size: 13px;">Panel de Administrador</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            
+            // Guardar registro de acceso en el historial del navegador para el admin
+            let accesos = JSON.parse(localStorage.getItem('copaci_accesos')) || [];
+            accesos.push({ usuario: user, fecha: new Date().toLocaleString() });
+            localStorage.setItem('copaci_accesos', JSON.stringify(accesos));
+
+            // Si es el admin especial
+            if(user === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'portal.html';
+            }
+        });
+    </script>
+</body>
+</html>
