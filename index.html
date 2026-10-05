@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal COPACI - Acceso</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+    <div class="login-container">
+        <div class="login-header">
+            <img src="logo.jpg" alt="Logo COPACI" width="90">
+            <h1>Portal COPACI</h1>
+            <p>Consejo de Participación Ciudadana</p>
+        </div>
+
+        <!-- Pestañas para cambiar entre Iniciar Sesión y Registrarse -->
+        <div class="auth-tabs" style="display: flex; margin-bottom: 20px; border-bottom: 2px solid #e1e4e8;">
+            <button type="button" onclick="mostrarLogin()" id="btn-tab-login" class="tab-btn active" style="flex:1; padding:10px; background:none; border:none; font-weight:bold; cursor:pointer; color:#1e3c72; border-bottom: 3px solid #1e3c72;">Iniciar Sesión</button>
+            <button type="button" onclick="mostrarRegistro()" id="btn-tab-registro" class="tab-btn" style="flex:1; padding:10px; background:none; border:none; font-weight:bold; cursor:pointer; color:#666;">Registrarse</button>
+        </div>
+
+        <!-- 1. Formulario de Inicio de Sesión -->
+        <form id="form-login" class="login-form" onsubmit="iniciarSesion(event)">
+            <div class="input-group">
+                <label for="loginUser">Usuario:</label>
+                <input type="text" id="loginUser" required placeholder="Tu usuario">
+            </div>
+            <div class="input-group">
+                <label for="loginPass">Contraseña:</label>
+                <input type="password" id="loginPass" required placeholder="********">
+            </div>
+            <button type="submit" class="btn-primary">Entrar al Portal</button>
+        </form>
+
+        <!-- 2. Formulario de Registro (Oculto por defecto) -->
+        <form id="form-registro" class="login-form oculto" style="display: none;" onsubmit="registrarUsuario(event)">
+            <div class="input-group">
+                <label for="regNombre">Nombre completo:</label>
+                <input type="text" id="regNombre" required placeholder="Tu nombre">
+            </div>
+            <div class="input-group">
+                <label for="regUser">Nuevo Usuario:</label>
+                <input type="text" id="regUser" required placeholder="Elige un usuario">
+            </div>
+            <div class="input-group">
+                <label for="regPass">Nueva Contraseña:</label>
+                <input type="password" id="regPass" required placeholder="********">
+            </div>
+            <button type="submit" class="btn-primary">Crear Cuenta</button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="admin.html" style="color: #666; font-size: 13px; text-decoration: none;">🔒 Ir al Panel de Administrador</a>
+        </div>
+    </div>
+
+    <script>
+        function mostrarRegistro() {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-registro').style.display = 'block';
+            document.getElementById('btn-tab-login').style.color = '#666';
+            document.getElementById('btn-tab-login').style.borderBottom = 'none';
+            document.getElementById('btn-tab-registro').style.color = '#1e3c72';
+            document.getElementById('btn-tab-registro').style.borderBottom = '3px solid #1e3c72';
+        }
+
+        function mostrarLogin() {
+            document.getElementById('form-registro').style.display = 'none';
+            document.getElementById('form-login').style.display = 'block';
+            document.getElementById('btn-tab-registro').style.color = '#666';
+            document.getElementById('btn-tab-registro').style.borderBottom = 'none';
+            document.getElementById('btn-tab-login').style.color = '#1e3c72';
+            document.getElementById('btn-tab-login').style.borderBottom = '3px solid #1e3c72';
+        }
+
+        // Registrar usuario y guardarlo en localStorage
+        function registrarUsuario(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('regNombre').value;
+            const usuario = document.getElementById('regUser').value;
+            const password = document.getElementById('regPass').value;
+
+            let usuarios = JSON.parse(localStorage.getItem('copaci_usuarios')) || [];
+            
+            // Verificar si el usuario ya existe
+            if(usuarios.some(u => u.usuario === usuario)) {
+                alert('Ese usuario ya está registrado. Elige otro.');
+                return;
+            }
+
+            usuarios.push({ nombre, usuario, password, fecha: new Date().toLocaleString() });
+            localStorage.setItem('copaci_usuarios', JSON.stringify(usuarios));
+
+            alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+            document.getElementById('regNombre').value = '';
+            document.getElementById('regUser').value = '';
+            document.getElementById('regPass').value = '';
+            mostrarLogin();
+        }
+
+        // Iniciar sesión y guardar registro de accesos
+        function iniciarSesion(event) {
+            event.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            // Registrar acceso para el panel de administración
+            let accesos = JSON.parse(localStorage.getItem('copaci_accesos')) || [];
+            accesos.push({ usuario: user, fecha: new Date().toLocaleString() });
+            localStorage.setItem('copaci_accesos', JSON.stringify(accesos));
+
+            // Si es administrador
+            if(user === 'admin') {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // Validar contra usuarios registrados
+            let usuarios = JSON.parse(localStorage.getItem('copaci_usuarios')) || [];
+            const encontrado = usuarios.find(u => u.usuario === user && u.password === pass);
+
+            if(encontrado || (user === 'usuario' && pass === '1234')) {
+                window.location.href = 'portal.html';
+            } else {
+                alert('Usuario o contraseña incorrectos, o necesitas registrarte primero.');
+            }
+        }
+    </script>
+</body>
+</html>
