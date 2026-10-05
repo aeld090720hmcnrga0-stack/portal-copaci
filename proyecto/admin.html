@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - COPACI</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .admin-container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f4f6f9; }
-        .btn-volver { display: inline-block; padding: 8px 15px; background: #333; color: white; text-decoration: none; border-radius: 4px; }
-    </style>
 </head>
-<body style="background-color: #f4f6f9; font-family: Arial, sans-serif;">
+<body style="background-color: #f4f6f9;">
 
     <div class="admin-container">
         <h1>Panel de Control del Administrador</h1>
@@ -24,7 +17,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Usuario / Correo</th>
+                    <th>Usuario</th>
                     <th>Fecha de Registro</th>
                 </tr>
             </thead>
@@ -53,9 +46,11 @@
         // Cargar usuarios registrados
         const usuarios = JSON.parse(localStorage.getItem('copaci_usuarios')) || [];
         const tbodyUsuarios = document.getElementById('tablaUsuarios');
-        if(usuarios.length === 0) {
+        
+        if (usuarios.length === 0) {
             tbodyUsuarios.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay usuarios registrados todavía.</td></tr>';
         } else {
+            tbodyUsuarios.innerHTML = ''; // Limpiar
             usuarios.forEach(u => {
                 tbodyUsuarios.innerHTML += `<tr><td>${u.nombre}</td><td>${u.usuario}</td><td>${u.fecha}</td></tr>`;
             });
@@ -64,9 +59,11 @@
         // Cargar accesos
         const accesos = JSON.parse(localStorage.getItem('copaci_accesos')) || [];
         const tbodyAccesos = document.getElementById('tablaAccesos');
-        if(accesos.length === 0) {
+        
+        if (accesos.length === 0) {
             tbodyAccesos.innerHTML = '<tr><td colspan="2" style="text-align:center;">No hay registros de entradas todavía.</td></tr>';
         } else {
+            tbodyAccesos.innerHTML = ''; // Limpiar
             accesos.forEach(a => {
                 tbodyAccesos.innerHTML += `<tr><td>${a.usuario}</td><td>${a.fecha}</td></tr>`;
             });
