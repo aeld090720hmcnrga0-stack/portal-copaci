@@ -2,57 +2,45 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal COPACI - Registro</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Registro - Portal COPACI</title>
 </head>
-<body class="login-body">
+<body>
+    <h2>Registro de Ciudadano</h2>
+    <form id="formRegistro">
+        <label>Correo:</label>
+        <input type="email" id="correoRegistro" required><br><br>
 
-    <div class="login-container">
-        <div class="login-header">
-            <img src="logo.jpg" alt="Logo COPACI" width="100">
-            <h1>Registro COPACI</h1>
-            <p>Crea tu cuenta de ciudadano</p>
-        </div>
+        <label>Contraseña:</label>
+        <input type="password" id="passwordRegistro" required><br><br>
 
-        <form id="registroForm" class="login-form">
-            <div class="input-group">
-                <label for="regNombre">Nombre completo:</label>
-                <input type="text" id="regNombre" required placeholder="Tu nombre">
-            </div>
-            <div class="input-group">
-                <label for="regUser">Usuario / Correo:</label>
-                <input type="text" id="regUser" required placeholder="Elige un usuario">
-            </div>
-            <div class="input-group">
-                <label for="regPass">Contraseña:</label>
-                <input type="password" id="regPass" required placeholder="********">
-            </div>
-            <button type="submit" class="btn-primary">Registrarse</button>
-        </form>
+        <button type="submit">Registrarse</button>
+    </form>
 
-        <div class="register-section" style="margin-top: 15px;">
-            <p>¿Ya tienes cuenta?</p>
-            <a href="index.html" class="btn-secondary">Iniciar Sesión</a>
-        </div>
-    </div>
+    <p>¿Ya tienes cuenta? <a href="index.html">Inicia sesión aquí</a></p>
 
     <script>
-        document.getElementById('registroForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('regNombre').value;
-            const usuario = document.getElementById('regUser').value;
-            const password = document.getElementById('regPass').value;
+        document.getElementById("formRegistro").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-            // Obtener usuarios existentes o crear lista nueva
-            let usuarios = JSON.parse(localStorage.getItem('copaci_usuarios')) || [];
-            
+            let correo = document.getElementById("correoRegistro").value.trim();
+            let password = document.getElementById("passwordRegistro").value.trim();
+
+            // Obtener usuarios previos o crear un arreglo vacío
+            let usuarios = JSON.parse(localStorage.getItem("usuariosRegistrados")) || [];
+
+            // Validar si el correo ya existe
+            let existe = usuarios.some(u => u.email === correo);
+            if (existe) {
+                alert("Este correo ya está registrado.");
+                return;
+            }
+
             // Guardar nuevo usuario
-            usuarios.push({ nombre, usuario, password, fecha: new Date().toLocaleString() });
-            localStorage.setItem('copaci_usuarios', JSON.stringify(usuarios));
+            usuarios.push({ email: correo, pass: password });
+            localStorage.setItem("usuariosRegistrados", JSON.stringify(usuarios));
 
-            alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-            window.location.href = 'index.html';
+            alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
+            window.location.href = "index.html"; // Te manda al login
         });
     </script>
 </body>
