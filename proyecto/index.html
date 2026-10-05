@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Portal COPACI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body-login">
+
+    <div class="auth-box">
+        <!-- Pestañas para cambiar entre Iniciar Sesión y Registrarse -->
+        <div class="auth-tabs">
+            <button onclick="mostrarLogin()" id="btn-tab-login" class="tab-btn active">Iniciar Sesión</button>
+            <button onclick="mostrarRegistro()" id="btn-tab-registro" class="tab-btn">Registrarse</button>
+        </div>
+
+        <!-- 1. Formulario de Inicio de Sesión -->
+        <form id="form-login" onsubmit="iniciarSesion(event)">
+            <h2>Iniciar Sesión</h2>
+            <label for="login-user">Usuario:</label>
+            <input type="text" id="login-user" required placeholder="Tu usuario">
+            
+            <label for="login-pass">Contraseña:</label>
+            <input type="password" id="login-pass" required placeholder="Tu contraseña">
+            
+            <button type="submit" class="btn-main">Entrar al Portal</button>
+        </form>
+
+        <!-- 2. Formulario de Registro con Selección de Rol (Oculto al inicio) -->
+        <form id="form-registro" class="oculto" onsubmit="registrarUsuario(event)">
+            <h2>Crear Cuenta</h2>
+            <label for="reg-user">Usuario:</label>
+            <input type="text" id="reg-user" required placeholder="Elige un usuario">
+            
+            <label for="reg-pass">Contraseña:</label>
+            <input type="password" id="reg-pass" required placeholder="Elige una contraseña">
+
+            <label for="reg-rol">Tipo de Usuario:</label>
+            <select id="reg-rol" class="select-rol">
+                <option value="usuario">Ciudadano / Usuario Regular</option>
+                <option value="admin">Administrador</option>
+            </select>
+            
+            <button type="submit" class="btn-main">Registrarse</button>
+        </form>
+    </div>
+
+    <!-- SCRIPT DE JAVASCRIPT PARA GUARDAR Y VALIDAR ROLES -->
+    <script>
+        // Funciones para cambiar de pestaña visualmente
+        function mostrarRegistro() {
+            document.getElementById('form-login').classList.add('oculto');
+            document.getElementById('form-registro').classList.remove('oculto');
+            document.getElementById('btn-tab-login').classList.remove('active');
+            document.getElementById('btn-tab-registro').classList.add('active');
+        }
+
+        function mostrarLogin() {
+            document.getElementById('form-registro').classList.add('oculto');
+            document.getElementById('form-login').classList.remove('oculto');
+            document.getElementById('btn-tab-registro').classList.remove('active');
+            document.getElementById('btn-tab-login').classList.add('active');
+        }
+
+        // Función para registrar y guardar en la memoria del navegador (localStorage)
+        function registrarUsuario(event) {
+            event.preventDefault();
+            const user = document.getElementById('reg-user').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+            const rol = document.getElementById('reg-rol').value;
+
+            // Creamos un objeto con los datos del usuario
+            const datosUsuario = {
+                password: pass,
+                rol: rol
+            };
+
+            // Guardamos los datos usando el nombre de usuario como "llave" en localStorage
+            // Esto permite guardar MÚLTIPLES usuarios diferentes si lo deseas
+            localStorage.setItem('user_' + user, JSON.stringify(datosUsuario));
+
+            alert('¡Registro exitoso como ' + (rol === 'admin' ? 'Administrador' : 'Ciudadano') + '! Ahora inicia sesión.');
+            document.getElementById('reg-user').value = '';
+            document.getElementById('reg-pass').value = '';
+            mostrarLogin();
+        }
+
+        // Función para iniciar sesión validando los datos guardados
+        function iniciarSesion(event) {
+            event.preventDefault();
+            const userIngresado = document.getElementById('login-user').value.trim();
+            const passIngresado = document.getElementById('login-pass').value;
+
+            // Cuenta de Administrador por defecto de respaldo (por si no te has registrado)
+            if (userIngresado === "admin" && passIngresado === "1234") {
+                localStorage.setItem('sesionActiva', JSON.stringify({ usuario: 'admin', rol: 'admin' }));
+                window.location.href = "portal.html";
+                return;
+            }
+
+            // Buscamos si el usuario existe en el localStorage
+            const datosGuardadosJson = localStorage.getItem('user_' + userIngresado);
+
+            if (!datosGuardadosJson) {
+                alert('El usuario no existe. Por favor regístrate primero.');
+                return;
+            }
+
+            const datosGuardados = JSON.parse(datosGuardadosJson);
+
+            // Validamos la contraseña
+            if (passGuardado === datosGuardados.password) {
+                // Guardamos quién inició sesión actualmente y su rol
+                localStorage.setItem('sesionActiva', JSON.stringify({ usuario: userIngresado, rol: datosGuardados.rol }));
+                
+                // Redirigimos al portal principal
+                window.location.href = "portal.html";
+            } else {
+                alert('Contraseña incorrecta.');
+            }
+        }
+    </script>
+</body>
+</html>

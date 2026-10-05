@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eef2f3;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.body-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-box {
+    background: white;
+    width: 350px;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.auth-box h2 {
+    font-size: 1.2rem;
+    color: #004080;
+    text-align: center;
+    margin-top: 0;
+}
+
+.auth-box label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn-main {
+    width: 100%;
+    background-color: #004080;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-main:hover {
+    background-color: #002b55;
+}
+
+header {
+    background-color: #004080;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+}
+
+header img {
+    display: block;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+}
+
+.menu-botones {
+    display: flex;
+    justify-content: center;
+    background-color: #003366;
+    padding: 10px;
+    gap: 15px;
+}
+
+.btn {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.btn:hover {
+    background-color: #e6b800;
+}
+
+/* Estilo para resaltar la página en la que estás */
+.btn.activo {
+    background-color: #ffffff;
+    color: #004080;
+    border: 2px solid #ffcc00;
+}
+
+.btn-salir {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.btn-salir:hover {
+    background-color: #cc0000;
+}
+
+main {
+    background-color: white;
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+section {
+    margin-bottom: 25px;
+}
+
+h2 {
+    color: #004080;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 5px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.85rem;
+}
